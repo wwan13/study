@@ -34,4 +34,6 @@ out/
 /.nb-gradle/
 
 ### VS Code ###
-.vscode/
+.vscode
+
+스프링 기반 REST API 개발 (인프런)_수정.pdf
