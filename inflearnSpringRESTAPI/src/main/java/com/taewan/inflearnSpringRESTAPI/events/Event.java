@@ -2,12 +2,15 @@ package com.taewan.inflearnSpringRESTAPI.events;
 
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Builder @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @EqualsAndHashCode(of= "id")
+@Entity
 public class Event {
 
+    @Id @GeneratedValue
     private int id;
     private String name;
     private String description;
@@ -21,6 +24,7 @@ public class Event {
     private int limitOfEnrollment;
     private boolean offline;
     private boolean free;
+    @Enumerated(EnumType.STRING) // 기본값 == ordinal (순서에 따라 0,1,2.. 를 반환)
     private EventStatus eventStatus;
 
 }
