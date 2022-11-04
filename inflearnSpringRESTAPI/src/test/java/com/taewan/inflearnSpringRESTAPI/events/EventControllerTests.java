@@ -1,6 +1,7 @@
 package com.taewan.inflearnSpringRESTAPI.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.taewan.inflearnSpringRESTAPI.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +35,7 @@ public class EventControllerTests {
     ObjectMapper objectMapper;
 
     @Test
+    @TestDescription("정상적으로 이벤트를 생성하는 테스트")
     public void createEvent() throws Exception {
         EventDto event = EventDto.builder()
                 .name("Spring")
@@ -63,6 +65,7 @@ public class EventControllerTests {
     }
 
     @Test
+    @TestDescription("입력받을 수 없는 값을 사용한 경우 에러가 발생하는 테스트")
     public void createEvent_BadRequest() throws Exception {
         Event event = Event.builder()
                 .id(100)
@@ -89,6 +92,7 @@ public class EventControllerTests {
     }
 
     @Test
+    @TestDescription("입력값이 비어있는 경우 에러가 발생하는 테스트")
     public void createEvent_BadRequest_EmptyInput() throws Exception {
         EventDto eventDto = EventDto.builder().build();
 
@@ -99,6 +103,7 @@ public class EventControllerTests {
     }
 
     @Test
+    @TestDescription("입력값이 잘못된햣  경우 에러가 발생하는 테스트")
     public void createEvent_BadRequest_WrongInput() throws Exception {
         EventDto eventDto = EventDto.builder()
                 .name("Spring")
