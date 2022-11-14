@@ -2,12 +2,10 @@ package com.wwan13.studyspring.profiles;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -25,5 +23,12 @@ public class ProfileController {
         URI createdUri = linkTo(ProfileController.class).slash(newProfile.getId()).toUri();
 
         return ResponseEntity.created(createdUri).body(profile);
+    }
+
+    @GetMapping
+    public ResponseEntity getAllProfiles() {
+        List allProfiles = profileRepository.findAll();
+
+        return ResponseEntity.ok().body(allProfiles);
     }
 }
