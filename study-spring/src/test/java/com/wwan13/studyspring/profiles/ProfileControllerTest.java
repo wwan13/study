@@ -79,4 +79,23 @@ class ProfileControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    /**
+     * GET api/profiles/{id}
+     */
+    @Test
+    public void getProfileById() throws Exception{
+        Profile profile1 = Profile.builder()
+                .name("kim")
+                .age(23)
+                .job("student")
+                .build();
+        this.mockMvc.perform(post("/api/profiles/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(profile1)));
+
+        this.mockMvc.perform(get("/api/profiles/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 }
