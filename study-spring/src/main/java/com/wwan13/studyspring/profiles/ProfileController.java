@@ -11,13 +11,12 @@ import java.util.Optional;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
-@RequestMapping(value = "api/profiles", produces = "application/json")
 public class ProfileController {
 
     @Autowired
     ProfileRepository profileRepository;
 
-    @PostMapping
+    @PostMapping(value = "api/profiles", produces = "application/json")
     public ResponseEntity createProfile(@RequestBody Profile profile) {
 
         Profile newProfile = this.profileRepository.save(profile);
@@ -26,14 +25,14 @@ public class ProfileController {
         return ResponseEntity.created(createdUri).body(profile);
     }
 
-    @GetMapping
+    @GetMapping(value = "api/profiles", produces = "application/json")
     public ResponseEntity getAllProfiles() {
         List allProfiles = profileRepository.findAll();
 
         return ResponseEntity.ok().body(allProfiles);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "api/profiles/{id}", produces = "application/json")
     public ResponseEntity getProfileById(@PathVariable Integer id) {
         Optional<Profile> profile = profileRepository.findById(id);
 
