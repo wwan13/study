@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -31,4 +32,12 @@ public class ProfileController {
 
         return ResponseEntity.ok().body(allProfiles);
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity getProfileById(@PathVariable Integer id) {
+        Optional<Profile> profile = profileRepository.findById(id);
+
+        return ResponseEntity.ok().body(profile);
+    }
+
 }
