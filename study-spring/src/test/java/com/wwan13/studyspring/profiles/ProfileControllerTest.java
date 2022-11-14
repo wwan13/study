@@ -12,8 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -84,7 +83,7 @@ class ProfileControllerTest {
      * GET api/profiles/{id}
      */
     @Test
-    public void getProfileById() throws Exception{
+    public void getProfileById() throws Exception {
         Profile profile1 = Profile.builder()
                 .name("kim")
                 .age(23)
@@ -95,6 +94,24 @@ class ProfileControllerTest {
                 .content(this.objectMapper.writeValueAsString(profile1)));
 
         this.mockMvc.perform(get("/api/profiles/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * DELETE api/profile/{id}
+     */
+    @Test public void deleteProfile() throws Exception {
+        Profile profile1 = Profile.builder()
+                .name("kim")
+                .age(23)
+                .job("student")
+                .build();
+        this.mockMvc.perform(post("/api/profiles/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(profile1)));
+
+        this.mockMvc.perform(delete("/api/profiles/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
