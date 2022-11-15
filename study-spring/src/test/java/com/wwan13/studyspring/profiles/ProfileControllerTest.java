@@ -1,6 +1,8 @@
 package com.wwan13.studyspring.profiles;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,31 @@ class ProfileControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @BeforeEach
+    public void before() throws Exception {
+
+        Profile profile1 = Profile.builder()
+                .name("kim")
+                .age(23)
+                .job("student")
+                .build();
+        this.mockMvc.perform(post("/api/profiles/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(profile1)));
+
+        Profile profile2 = Profile.builder()
+                .name("lee")
+                .age(22)
+                .job("student")
+                .build();
+        this.mockMvc.perform(post("/api/profiles/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(profile2)));
+
+    }
+
     /**
      * POST api/profiles
-     * 요청이 정상적으로 작동하는지 확인하는 테스트
      */
     @Test
     public void createProfile() throws Exception {
@@ -56,23 +80,6 @@ class ProfileControllerTest {
      */
     @Test
     public void getAllProfiles() throws Exception {
-        Profile profile1 = Profile.builder()
-                .name("kim")
-                .age(23)
-                .job("student")
-                .build();
-        this.mockMvc.perform(post("/api/profiles/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(profile1)));
-
-        Profile profile2 = Profile.builder()
-                .name("lee")
-                .age(22)
-                .job("student")
-                .build();
-        this.mockMvc.perform(post("/api/profiles/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(profile2)));
 
         this.mockMvc.perform(get("/api/profiles/"))
                 .andDo(print())
@@ -84,14 +91,6 @@ class ProfileControllerTest {
      */
     @Test
     public void getProfileById() throws Exception {
-        Profile profile1 = Profile.builder()
-                .name("kim")
-                .age(23)
-                .job("student")
-                .build();
-        this.mockMvc.perform(post("/api/profiles/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(profile1)));
 
         this.mockMvc.perform(get("/api/profiles/1"))
                 .andDo(print())
@@ -102,14 +101,6 @@ class ProfileControllerTest {
      * DELETE api/profile/{id}
      */
     @Test public void deleteProfile() throws Exception {
-        Profile profile1 = Profile.builder()
-                .name("kim")
-                .age(23)
-                .job("student")
-                .build();
-        this.mockMvc.perform(post("/api/profiles/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(profile1)));
 
         this.mockMvc.perform(delete("/api/profiles/1"))
                 .andDo(print())
