@@ -2,6 +2,7 @@ package com.wwan13.studyspring.profiles;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,9 @@ class ProfileControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    ProfileRepository profileRepository;
+
     @BeforeEach
     public void before() throws Exception {
 
@@ -50,6 +54,13 @@ class ProfileControllerTest {
         this.mockMvc.perform(post("/api/profiles/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(profile2)));
+
+    }
+
+    @AfterEach
+    public void after() {
+
+        profileRepository.deleteAll();
 
     }
 
