@@ -1,6 +1,7 @@
 package com.wwan13.studyspring.profiles;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class ProfileController {
 
     @GetMapping(value = "api/profiles", produces = "application/json")
     public ResponseEntity getAllProfiles() {
+
         List allProfiles = profileRepository.findAll();
 
         return ResponseEntity.ok().body(allProfiles);
@@ -35,12 +37,23 @@ public class ProfileController {
 
     @GetMapping(value = "api/profiles/{id}", produces = "application/json")
     public ResponseEntity getProfileById(@PathVariable Integer id) {
+
         Optional<Profile> profile = profileRepository.findById(id);
+        if (!profile.isPresent()) {
+            return ResponseEntity.badRequest().body("invalid ID");
+        }
+
         return ResponseEntity.ok().body(profile);
     }
 
     @DeleteMapping(value = "api/profiles/{id}", produces = "application/json")
     public ResponseEntity deleteProfile(@PathVariable Integer id) {
+
+        Optional<Profile> profile = profileRepository.findById(id);
+        if (!profile.isPresent()) {
+            return ResponseEntity.badRequest().body("invalid ID");
+        }
+
         profileRepository.deleteById(id);
         return ResponseEntity.ok().body(id);
     }
