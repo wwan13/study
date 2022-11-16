@@ -121,7 +121,7 @@ class ProfileControllerTest {
 
         this.mockMvc.perform(get("/api/profiles/100"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 
     /**
