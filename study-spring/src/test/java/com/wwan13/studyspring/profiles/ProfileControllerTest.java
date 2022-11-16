@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,7 @@ class ProfileControllerTest {
 
     /**
      * POST api/profiles
+     * 요청 성공 테스트
      */
     @Test
     public void createProfile() throws Exception {
@@ -88,6 +90,7 @@ class ProfileControllerTest {
 
     /**
      * GET api/profiles
+     * 요청 성공 테스트
      */
     @Test
     public void getAllProfiles() throws Exception {
@@ -99,6 +102,7 @@ class ProfileControllerTest {
 
     /**
      * GET api/profiles/{id}
+     * 요청 성공 테스트
      */
     @Test
     public void getProfileById() throws Exception {
@@ -109,12 +113,37 @@ class ProfileControllerTest {
     }
 
     /**
-     * DELETE api/profile/{id}
+     * GET api/profiles/{id}
+     * 존재하지 않는 id를 요청했을때
      */
-    @Test public void deleteProfile() throws Exception {
+    @Test
+    public void getProfileById_notExist() throws Exception {
+
+        this.mockMvc.perform(get("/api/profiles/100"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * DELETE api/profile/{id}
+     * 요청 성공 테스트
+     */
+    @Test
+    public void deleteProfile() throws Exception {
 
         this.mockMvc.perform(delete("/api/profiles/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * DELETE api/profile/{id}
+     * 존재하지 않는 id를 요쳥하였을때
+     */
+    @Test
+    public void deleteProfile_notExist() throws Exception {
+        this.mockMvc.perform(delete("/api/profiles/100"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }
