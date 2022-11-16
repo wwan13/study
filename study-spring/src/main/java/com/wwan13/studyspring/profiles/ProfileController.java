@@ -1,7 +1,6 @@
 package com.wwan13.studyspring.profiles;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +15,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ProfileController {
 
     @Autowired
-    ProfileRepository profileRepository;
+    ProfileService profileService;
 
     @PostMapping(value = "api/profiles", produces = "application/json")
     public ResponseEntity createProfile(@RequestBody Profile profile) {
 
-        Profile newProfile = this.profileRepository.save(profile);
+        Profile newProfile = this.profileService.createProfile(profile);
         URI createdUri = linkTo(methodOn(ProfileController.class).createProfile(profile)).slash(newProfile.getId()).toUri();
 
         return ResponseEntity.created(createdUri).body(profile);
@@ -30,7 +29,7 @@ public class ProfileController {
     @GetMapping(value = "api/profiles", produces = "application/json")
     public ResponseEntity getAllProfiles() {
 
-        List allProfiles = profileRepository.findAll();
+        List<Profile> allProfiles = profileService.getAllProfiles();
 
         return ResponseEntity.ok().body(allProfiles);
     }
@@ -38,7 +37,7 @@ public class ProfileController {
     @GetMapping(value = "api/profiles/{id}", produces = "application/json")
     public ResponseEntity getProfileById(@PathVariable Integer id) {
 
-        Optional<Profile> profile = profileRepository.findById(id);
+        Optional<Profile> profile = profileService.findProfileById(id);
         if (!profile.isPresent()) {
             return ResponseEntity.badRequest().body("invalid ID");
         }
@@ -49,12 +48,12 @@ public class ProfileController {
     @DeleteMapping(value = "api/profiles/{id}", produces = "application/json")
     public ResponseEntity deleteProfile(@PathVariable Integer id) {
 
-        Optional<Profile> profile = profileRepository.findById(id);
+        Optional<Profile> profile = profileService.findProfileById(id);
         if (!profile.isPresent()) {
             return ResponseEntity.badRequest().body("invalid ID");
         }
 
-        profileRepository.deleteById(id);
+        profileService.deleteProfileById(id);
         return ResponseEntity.ok().body(id);
     }
 
