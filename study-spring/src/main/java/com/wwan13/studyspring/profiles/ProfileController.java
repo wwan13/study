@@ -37,8 +37,8 @@ public class ProfileController {
     @GetMapping(value = "api/profiles/{id}", produces = "application/json")
     public ResponseEntity getProfileById(@PathVariable Integer id) {
 
-        Optional<Profile> profile = profileService.findProfileById(id);
-        if (!profile.isPresent()) {
+        Profile profile = profileService.findProfileById(id);
+        if (profile == null) {
             return ResponseEntity.badRequest().body("invalid ID");
         }
 
@@ -48,13 +48,19 @@ public class ProfileController {
     @DeleteMapping(value = "api/profiles/{id}", produces = "application/json")
     public ResponseEntity deleteProfile(@PathVariable Integer id) {
 
-        Optional<Profile> profile = profileService.findProfileById(id);
-        if (!profile.isPresent()) {
+        Profile profile = profileService.findProfileById(id);
+        if (profile == null) {
             return ResponseEntity.badRequest().body("invalid ID");
         }
 
-        profileService.deleteProfileById(id);
         return ResponseEntity.ok().body(id);
+    }
+
+    @PutMapping(value = "api/profiles/{id}", produces = "application/json")
+    public ResponseEntity updateProfile(@PathVariable Integer id, @RequestBody Profile profile) {
+
+        Profile updatedProfile = this.profileService.updateProfile(id, profile);
+        return ResponseEntity.ok().body(updatedProfile);
     }
 
 }

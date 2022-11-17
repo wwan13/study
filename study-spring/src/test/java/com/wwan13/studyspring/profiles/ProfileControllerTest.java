@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -35,6 +37,9 @@ class ProfileControllerTest {
     @Autowired
     ProfileRepository profileRepository;
 
+    @Autowired
+    ProfileService profileService;
+
     @BeforeEach
     public void before() throws Exception {
 
@@ -43,18 +48,14 @@ class ProfileControllerTest {
                 .age(23)
                 .job("student")
                 .build();
-        this.mockMvc.perform(post("/api/profiles/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(profile1)));
+        this.profileService.createProfile(profile1);
 
         Profile profile2 = Profile.builder()
                 .name("lee")
                 .age(22)
                 .job("student")
                 .build();
-        this.mockMvc.perform(post("/api/profiles/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(profile2)));
+        this.profileService.createProfile(profile2);
 
     }
 
@@ -145,5 +146,23 @@ class ProfileControllerTest {
         this.mockMvc.perform(delete("/api/profiles/100"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    /**
+     * PUT api/profiles/{id}
+     * 요청 성공
+     */
+    @Test
+    public void updateProfile() throws Exception {
+
+        Profile profile = this.profileService.findProfileById(1);
+        profile.setName("Park");
+
+        this.mockMvc.perform(put("/api/profiles/100")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(profile)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").value("Park"));
     }
 }

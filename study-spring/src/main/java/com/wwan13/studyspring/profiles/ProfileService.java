@@ -13,19 +13,27 @@ public class ProfileService {
     ProfileRepository profileRepository;
 
     public Profile createProfile(Profile profile) {
-        return profileRepository.save(profile);
+        return this.profileRepository.save(profile);
     }
 
     public List<Profile> getAllProfiles() {
-        return profileRepository.findAll();
+        return this.profileRepository.findAll();
     }
 
-    public Optional<Profile> findProfileById(Integer id) {
-        return profileRepository.findById(id);
+    public Profile findProfileById(Integer id) {
+        return this.profileRepository.findById(id).orElse(null);
     }
 
     public void deleteProfileById(Integer id) {
-        profileRepository.deleteById(id);
+        this.profileRepository.deleteById(id);
+    }
+
+    public Profile updateProfile(Integer id, Profile profile) {
+        Profile originProfile = this.findProfileById(id);
+        originProfile = profile;
+        Profile updatedProfile = this.profileRepository.save(originProfile);
+
+        return updatedProfile;
     }
     
 }
