@@ -28,6 +28,10 @@ public class ProfileService {
         this.profileRepository.deleteById(id);
     }
 
+    public void deleteAllProfiles() {
+        this.profileRepository.deleteAll();
+    }
+
     public Profile updateProfile(Integer id, Profile profile) {
         Profile originProfile = this.findProfileById(id);
         originProfile = profile;

@@ -29,7 +29,7 @@ public class ProfileController {
     @GetMapping(value = "api/profiles", produces = "application/json")
     public ResponseEntity getAllProfiles() {
 
-        List<Profile> allProfiles = profileService.getAllProfiles();
+        List<Profile> allProfiles = this.profileService.getAllProfiles();
 
         return ResponseEntity.ok().body(allProfiles);
     }
@@ -37,7 +37,7 @@ public class ProfileController {
     @GetMapping(value = "api/profiles/{id}", produces = "application/json")
     public ResponseEntity getProfileById(@PathVariable Integer id) {
 
-        Profile profile = profileService.findProfileById(id);
+        Profile profile = this.profileService.findProfileById(id);
         if (profile == null) {
             return ResponseEntity.badRequest().body("invalid ID");
         }
@@ -48,10 +48,12 @@ public class ProfileController {
     @DeleteMapping(value = "api/profiles/{id}", produces = "application/json")
     public ResponseEntity deleteProfile(@PathVariable Integer id) {
 
-        Profile profile = profileService.findProfileById(id);
+        Profile profile = this.profileService.findProfileById(id);
         if (profile == null) {
             return ResponseEntity.badRequest().body("invalid ID");
         }
+
+        this.profileService.deleteProfileById(id);
 
         return ResponseEntity.ok().body(id);
     }

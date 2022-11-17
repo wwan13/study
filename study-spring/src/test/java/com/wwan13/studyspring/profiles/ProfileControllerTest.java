@@ -35,9 +35,6 @@ class ProfileControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    ProfileRepository profileRepository;
-
-    @Autowired
     ProfileService profileService;
 
     @BeforeEach
@@ -62,7 +59,7 @@ class ProfileControllerTest {
     @AfterEach
     public void after() {
 
-        profileRepository.deleteAll();
+        this.profileService.deleteAllProfiles();
 
     }
 
