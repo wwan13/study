@@ -12,12 +12,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
+@RequestMapping(value = "api/profile", produces = "application/json")
 public class ProfileController {
 
     @Autowired
     ProfileService profileService;
 
-    @PostMapping(value = "api/profiles", produces = "application/json")
+    @PostMapping
     public ResponseEntity createProfile(@RequestBody Profile profile) {
 
         Profile newProfile = this.profileService.createProfile(profile);
@@ -26,7 +27,7 @@ public class ProfileController {
         return ResponseEntity.created(createdUri).body(profile);
     }
 
-    @GetMapping(value = "api/profiles", produces = "application/json")
+    @GetMapping
     public ResponseEntity getAllProfiles() {
 
         List<Profile> allProfiles = this.profileService.getAllProfiles();
@@ -34,7 +35,7 @@ public class ProfileController {
         return ResponseEntity.ok().body(allProfiles);
     }
 
-    @GetMapping(value = "api/profiles/{id}", produces = "application/json")
+    @GetMapping(value = "/{id}")
     public ResponseEntity getProfileById(@PathVariable Integer id) {
 
         Profile profile = this.profileService.findProfileById(id);
@@ -45,7 +46,7 @@ public class ProfileController {
         return ResponseEntity.ok().body(profile);
     }
 
-    @DeleteMapping(value = "api/profiles/{id}", produces = "application/json")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteProfile(@PathVariable Integer id) {
 
         Profile profile = this.profileService.findProfileById(id);
@@ -58,7 +59,7 @@ public class ProfileController {
         return ResponseEntity.ok().body(id);
     }
 
-    @PutMapping(value = "api/profiles/{id}", produces = "application/json")
+    @PutMapping(value = "/{id}")
     public ResponseEntity updateProfile(@PathVariable Integer id, @RequestBody Profile profile) {
 
         Profile updatedProfile = this.profileService.updateProfile(id, profile);
