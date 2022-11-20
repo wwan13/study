@@ -1,5 +1,7 @@
 package com.wwan13.studyspring.accounts;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -7,6 +9,9 @@ import java.util.Set;
 // @TABLE 애노테이션을 사용해 다른 이름으로 매핑 가능 하나 원천적으로 해결하기 위해 ACCOUNT 이름 사용
 
 @Entity
+@Builder @Setter @Getter
+@NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Account {
 
     @Id
@@ -16,7 +21,6 @@ public class Account {
 
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Set<AccountRoles> roles;
+    private AccountRoles roles;
 }
