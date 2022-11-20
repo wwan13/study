@@ -21,7 +21,8 @@ public class ProfileService {
     }
 
     public Profile findProfileById(Integer id) {
-        return this.profileRepository.findById(id).orElse(null);
+        return this.profileRepository.findById(id)
+                .orElseThrow(() -> new NullPointerException("profile not exist"));
     }
 
     public void deleteProfileById(Integer id) {

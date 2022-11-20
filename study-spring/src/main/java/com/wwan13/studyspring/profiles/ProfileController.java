@@ -2,11 +2,11 @@ package com.wwan13.studyspring.profiles;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -38,9 +38,11 @@ public class ProfileController {
     @GetMapping(value = "/{id}")
     public ResponseEntity getProfileById(@PathVariable Integer id) {
 
-        Profile profile = this.profileService.findProfileById(id);
-        if (profile == null) {
-            return ResponseEntity.badRequest().body("invalid ID");
+        Profile profile;
+        try {
+            profile = this.profileService.findProfileById(id);
+        }catch (NullPointerException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
         return ResponseEntity.ok().body(profile);
@@ -49,11 +51,12 @@ public class ProfileController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteProfile(@PathVariable Integer id) {
 
-        Profile profile = this.profileService.findProfileById(id);
-        if (profile == null) {
-            return ResponseEntity.badRequest().body("invalid ID");
+        Profile profile;
+        try {
+            profile = this.profileService.findProfileById(id);
+        }catch (NullPointerException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
         this.profileService.deleteProfileById(id);
 
         return ResponseEntity.ok().body(id);
