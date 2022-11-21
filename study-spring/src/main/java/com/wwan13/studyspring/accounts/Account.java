@@ -17,7 +17,7 @@ public class Account {
     @Id
     private Integer Id;
 
-    private String email;
+    private String name;
 
     private String password;
 

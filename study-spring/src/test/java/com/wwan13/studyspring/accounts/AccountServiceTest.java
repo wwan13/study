@@ -20,20 +20,4 @@ class AccountServiceTest {
     @Autowired
     AccountRepository accountRepository;
 
-    @Test
-    public void findUserByUsername() {
-
-        Account account = Account.builder()
-                .email("taewan@email.com")
-                .password("wwan")
-                .roles(AccountRoles.USER)
-                .build();
-        this.accountRepository.save(account);
-
-        UserDetailsService userDetailsService = (UserDetailsService)accountService;
-        UserDetails userDetails = userDetailsService.loadUserByUsername("taewan@email.com");
-
-        assertThat(userDetails.getPassword()).isEqualTo("wwan");
-    }
-
 }

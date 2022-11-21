@@ -9,15 +9,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AccountService implements UserDetailsService {
+public class AccountService {
 
     @Autowired
     AccountRepository accountRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
-        return null;
+    public Account findAccountById(String id) {
+        return this.accountRepository.findById(id)
+                .orElseThrow(() -> new NullPointerException("ID Not Exist"));
     }
+
 }
