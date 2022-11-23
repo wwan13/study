@@ -2,6 +2,7 @@ package com.wwan13.studyspring.configure;
 
 import com.wwan13.studyspring.accounts.JwtAccessDeniedHandler;
 import com.wwan13.studyspring.accounts.JwtAuthenticationEntryPoint;
+import com.wwan13.studyspring.accounts.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,6 +26,9 @@ public class SecurityConfiguration {
 
     @Autowired
     JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    @Autowired
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,9 +53,11 @@ public class SecurityConfiguration {
 
                 // API 주소에 따른 인가 설정
                 .authorizeRequests()
-                .antMatchers("/", "/**").permitAll()
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/api/**").authenticated()
                 .and()
 
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .formLogin().disable()
                 .headers().frameOptions().disable();
