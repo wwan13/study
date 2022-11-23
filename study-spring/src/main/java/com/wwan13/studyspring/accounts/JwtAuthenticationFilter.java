@@ -26,10 +26,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication); // 세션서 계속 사용하기 위해 등록
             } else {
                 if(jwtToken.isBlank()) {
-                    request.setAttribute("unauthorization", "401 인증키 없음.");
+                    request.setAttribute("unAuthorization", "401 인증키 없음.");
                 }
                 if(!JwtTokenProvider.validationToken(jwtToken)) {
-                    request.setAttribute("unauthorization", "401-001 인증키 만료.");
+                    request.setAttribute("unAuthorization", "401-001 인증키 만료.");
                 }
             }
         } catch (Exception e) {

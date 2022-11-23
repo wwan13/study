@@ -19,4 +19,9 @@ public class AccountService {
                 .orElseThrow(() -> new NullPointerException("ID Not Exist"));
     }
 
+    public Account getMyInfo() {
+        return this.accountRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new NullPointerException("no information"));
+    }
+
 }

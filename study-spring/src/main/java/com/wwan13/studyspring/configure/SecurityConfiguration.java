@@ -1,5 +1,6 @@
 package com.wwan13.studyspring.configure;
 
+import com.wwan13.studyspring.accounts.JwtAccessDeniedHandler;
 import com.wwan13.studyspring.accounts.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,22 +18,40 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+
     @Autowired
-    JwtAuthenticationEntryPoint unauthorizedHandler;
+    JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @Autowired
+    JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors() // 프론트앤드 서버를 다른 포트를 사용할 경우 CORS 설정
+                // 프론트앤드 서버를 다른 포트를 사용할 경우 CORS 설정
+                .cors()
                 .and()
-                .csrf().disable() // API 사용하고싶으면 disable
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)// 인증 실패시 처리
+
+                // csrf 설정
+                .csrf()
+                .disable()
+
+                // exception handler 설정
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// JWT 사용을 위해 Spring 에서 기본을 제공하는 Session 설정 해재
+
+                // JWT 사용을 위해 Spring 에서 기본을 제공하는 Session 설정 해재
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests() // API 주소에 따른 인가 설정
+
+                // API 주소에 따른 인가 설정
+                .authorizeRequests()
                 .antMatchers("/", "/**").permitAll()
                 .and()
+
+
                 .formLogin().disable()
                 .headers().frameOptions().disable();
 
