@@ -1,5 +1,5 @@
 package com.wwan13.studyspringsecurity.User;
 
-public enum UserRoles {
+public enum Authorities {
     ROLE_ADMIN, ROLE_USER
 }
