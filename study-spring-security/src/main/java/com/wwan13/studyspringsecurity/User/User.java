@@ -16,6 +16,6 @@ public class User {
     private String username;
     private String password;
     @Enumerated(EnumType.STRING)
-    private Authorities role;
+    private Authorities authority;
 
 }
