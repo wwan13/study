@@ -3,6 +3,7 @@ package com.wwan13.studyspringsecurity.jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -28,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String jwtToken = resolveToken(request);                                            // request 에서 토큰 가져오기
 
-        if (!jwtToken.isBlank() && tokenProvider.validateToken(jwtToken)) {
+        if (StringUtils.hasText(jwtToken) && tokenProvider.validateToken(jwtToken)) {
             Authentication authentication = tokenProvider.getAuthentication(jwtToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);           // 토큰 유효성 검사 이후 해당 토큰을 SecurityContext 에 저장
         }
@@ -41,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 
-        if (!bearerToken.isBlank() && bearerToken.startsWith(BEARER_PREFIX)) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(BEARER_PREFIX.length());
         }
 

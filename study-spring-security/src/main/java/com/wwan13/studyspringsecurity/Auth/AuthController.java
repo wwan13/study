@@ -21,11 +21,11 @@ public class AuthController {
     public ResponseEntity signup(@RequestBody UserRequestDto userRequestDto) {
 
         UserResponseDto userResponseDto = authService.signup(userRequestDto);
-        return ResponseEntity.ok().body(userRequestDto);
+        return ResponseEntity.ok().body(userResponseDto);
 
     }
 
-    @PostMapping(value = "login")
+    @PostMapping(value = "/login")
     public ResponseEntity login(@RequestBody UserRequestDto userRequestDto) {
 
         TokenDto tokenDto = authService.login(userRequestDto);

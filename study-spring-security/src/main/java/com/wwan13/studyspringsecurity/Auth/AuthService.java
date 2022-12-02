@@ -31,7 +31,7 @@ public class AuthService {
         }
 
         User user = userRequestDto.toUser(passwordEncoder);
-        return UserResponseDto.of(user);
+        return UserResponseDto.of(userRepository.save(user));
     }
 
     public TokenDto login(UserRequestDto userRequestDto) {
