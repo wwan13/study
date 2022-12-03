@@ -44,11 +44,14 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
 
                 .and()
+//                .authorizeRequests()
+//                .antMatchers("/auth/**")
+//                .permitAll()
+//                .anyRequest()
+//                .authenticated()
                 .authorizeRequests()
-                .antMatchers("/auth/**")
+                .antMatchers("/", "/**")
                 .permitAll()
-                .anyRequest()
-                .authenticated()
 
                 .and()
                 .apply(new JwtSecurityConfig());
