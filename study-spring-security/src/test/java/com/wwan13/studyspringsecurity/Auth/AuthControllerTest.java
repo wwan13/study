@@ -1,10 +1,12 @@
 package com.wwan13.studyspringsecurity.Auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wwan13.studyspringsecurity.User.Authorities;
 import com.wwan13.studyspringsecurity.User.User;
 import com.wwan13.studyspringsecurity.User.UserRepository;
 import com.wwan13.studyspringsecurity.User.UserRequestDto;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,25 @@ class AuthControllerTest {
     @Autowired
     UserRepository userRepository;
 
+    @BeforeEach
+    public void before() throws Exception {
+
+        User user1 = User.builder()
+                .username("ktw01")
+                .password("1q2w3e4r")
+                .authority(Authorities.ROLE_USER)
+                .build();
+        userRepository.save(user1);
+
+        User user2 = User.builder()
+                .username("ktw02")
+                .password("1q2w3e4r")
+                .authority(Authorities.ROLE_USER)
+                .build();
+        userRepository.save(user2);
+
+    }
+
     @Test
     public void signupTest() throws Exception {
 
@@ -45,16 +66,9 @@ class AuthControllerTest {
     @Test
     public void loginTest() throws Exception{
 
-        // signup
         UserRequestDto userRequestDto = new UserRequestDto();
-        userRequestDto.setUsername("wwan13@naver.com");
-        userRequestDto.setPassword("qwer1234");
-
-        this.mockMvc.perform(post("/auth/signup")
-                        .content(this.objectMapper.writeValueAsString(userRequestDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
-
+        userRequestDto.setUsername("ktw01");
+        userRequestDto.setPassword("1q2w3e4r");
 
         //login
         this.mockMvc.perform(post("/auth/login")
@@ -67,19 +81,9 @@ class AuthControllerTest {
     @Test
     public void getUserTest() throws Exception{
 
-        // signup
-        UserRequestDto userRequestDto = new UserRequestDto();
-        userRequestDto.setUsername("wwan13");
-        userRequestDto.setPassword("qwer1234");
-
-        this.mockMvc.perform(post("/auth/signup")
-                        .content(this.objectMapper.writeValueAsString(userRequestDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
-
-        User user = userRepository.findByUsername("wwan13").get();
+        User user = userRepository.findByUsername("ktw01").get();
         Assertions.assertThat(user).isNotNull();
-        Assertions.assertThat(user.getUsername()).isEqualTo("wwan13");
+        Assertions.assertThat(user.getUsername()).isEqualTo("ktw01");
 
     }
 
