@@ -17,9 +17,6 @@ public class UserRequestDto {
     private String username;
     private String password;
 
-    @Autowired
-    ModelMapper modelMapper;
-
     public User toUser(PasswordEncoder passwordEncoder) {
         return User.builder()
                 .username(this.username)
