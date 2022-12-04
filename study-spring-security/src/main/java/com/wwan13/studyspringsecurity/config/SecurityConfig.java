@@ -2,6 +2,8 @@ package com.wwan13.studyspringsecurity.config;
 
 import com.wwan13.studyspringsecurity.jwt.JwtAccessDeniedHandler;
 import com.wwan13.studyspringsecurity.jwt.JwtAuthenticationEntryPoint;
+import com.wwan13.studyspringsecurity.jwt.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,13 +14,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    @Autowired
-    JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final TokenProvider tokenProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -53,7 +54,7 @@ public class SecurityConfig {
 //                .permitAll()
 
                 .and()
-                .apply(new JwtSecurityConfig())
+                .apply(new JwtSecurityConfig(tokenProvider))
 
                 .and()
                 .formLogin()

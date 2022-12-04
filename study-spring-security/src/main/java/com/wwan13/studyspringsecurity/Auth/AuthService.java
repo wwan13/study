@@ -6,6 +6,7 @@ import com.wwan13.studyspringsecurity.User.UserRequestDto;
 import com.wwan13.studyspringsecurity.User.UserResponseDto;
 import com.wwan13.studyspringsecurity.jwt.TokenDto;
 import com.wwan13.studyspringsecurity.jwt.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,16 +15,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    AuthenticationManagerBuilder authenticationManagerBuilder;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
     public UserResponseDto signup(UserRequestDto userRequestDto) {
         if (userRepository.existsByUsername(userRequestDto.getUsername())) {

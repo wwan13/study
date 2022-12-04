@@ -1,5 +1,6 @@
 package com.wwan13.studyspringsecurity.User;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,10 +10,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Collections;
 
+@RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
