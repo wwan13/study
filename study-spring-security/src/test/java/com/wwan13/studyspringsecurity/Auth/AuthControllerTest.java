@@ -7,19 +7,24 @@ import com.wwan13.studyspringsecurity.User.UserRepository;
 import com.wwan13.studyspringsecurity.User.UserRequestDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 class AuthControllerTest {
@@ -51,30 +56,38 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("POST /auth/signup - success")
     public void signupTest() throws Exception {
 
+        String username = "wwan13";
+        String password = "qwer1234";
+
         UserRequestDto userRequestDto = new UserRequestDto();
-        userRequestDto.setUsername("wwan13");
-        userRequestDto.setPassword("qwer1234");
+        userRequestDto.setUsername(username);
+        userRequestDto.setPassword(password);
 
         this.mockMvc.perform(post("/auth/signup")
                         .content(this.objectMapper.writeValueAsString(userRequestDto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("username").value(username));
+
     }
 
     @Test
+    @DisplayName("POST /auth/login - success")
     public void loginTest() throws Exception{
 
         UserRequestDto userRequestDto = new UserRequestDto();
         userRequestDto.setUsername("ktw01");
         userRequestDto.setPassword("1q2w3e4r");
 
-        //login
         this.mockMvc.perform(post("/auth/login")
                         .content(this.objectMapper.writeValueAsString(userRequestDto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andDo(print())
+                .andExpect(status().isOk());
 
     }
 
@@ -84,6 +97,7 @@ class AuthControllerTest {
         User user = userRepository.findByUsername("ktw01").get();
         Assertions.assertThat(user).isNotNull();
         Assertions.assertThat(user.getUsername()).isEqualTo("ktw01");
+        System.out.println(user.getUsername() + " - " + user.getPassword());
 
     }
 

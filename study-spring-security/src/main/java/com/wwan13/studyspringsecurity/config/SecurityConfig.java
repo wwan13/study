@@ -44,17 +44,22 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
 
                 .and()
-//                .authorizeRequests()
-//                .antMatchers("/auth/**")
-//                .permitAll()
-//                .anyRequest()
-//                .authenticated()
                 .authorizeRequests()
-                .antMatchers("/", "/**")
+                .antMatchers("/","/auth/**")
                 .permitAll()
+                .anyRequest()
+                .authenticated()
+//                .antMatchers("/", "/**")
+//                .permitAll()
 
                 .and()
-                .apply(new JwtSecurityConfig());
+                .apply(new JwtSecurityConfig())
+
+                .and()
+                .formLogin()
+                .disable()
+                .httpBasic()
+                .disable();
 
         return http.build();
     }
