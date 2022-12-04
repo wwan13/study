@@ -48,10 +48,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/","/auth/**")
                 .permitAll()
-                .anyRequest()
+                .antMatchers("/apis/**")
                 .authenticated()
-//                .antMatchers("/", "/**")
-//                .permitAll()
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider))
