@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -70,6 +71,28 @@ class AuthControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("username").value(username));
+
+    }
+
+    @Test
+    @DisplayName("POST /auth/signup - already exist")
+    public void signupTest_alreadyExist() throws Exception {
+
+        String username = "ktw01";
+        String password = "1q2w3e4r";
+
+        UserRequestDto userRequestDto = new UserRequestDto();
+        userRequestDto.setUsername(username);
+        userRequestDto.setPassword(password);
+
+        this.mockMvc.perform(post("/auth/signup")
+                        .content(this.objectMapper.writeValueAsString(userRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is(500));
+//                .andExpect(
+//                        result -> assertTrue(result.getResolvedException() instanceof RuntimeException)
+//                );
 
     }
 

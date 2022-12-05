@@ -22,7 +22,7 @@ class HelloControllerTest {
     MockMvc mockMvc;
 
     @Test
-    public void anyApiTest_withoutToken() throws Exception {
+    public void anyApiTest_withoutAuthorizationToken() throws Exception {
         this.mockMvc.perform(get("/apis/hello")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
