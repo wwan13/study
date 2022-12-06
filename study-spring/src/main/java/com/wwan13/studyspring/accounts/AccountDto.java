@@ -6,13 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
+@Data
+@AllArgsConstructor @NoArgsConstructor
 public class AccountDto {
-
-    @Data
-    @NoArgsConstructor @AllArgsConstructor
-    public static final class Request {
-        private String id;
-        private String pw;
-    }
-
+    private String id;
+    private String password;
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "auth/login", produces = "application/json")
+@RequestMapping(value = "auth/", produces = "application/json")
 public class AccountController {
 
     @Autowired
@@ -21,19 +21,28 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-    @PostMapping
-    public ResponseEntity login(@RequestBody AccountDto.Request request) {
+    @PostMapping(value = "login")
+    public ResponseEntity logIn(@RequestBody AccountDto accountDto) {
+        Account account = accountService.findAccountById(accountDto.getId());
 
-        Account account = accountService.findAccountById(request.getId());
-
-        if(!request.getPw().equals(account.getPassword())) {
+        if(!accountDto.getPassword().equals(account.getPassword())) {
             return ResponseEntity.badRequest().body("pw error");
         }
 
-        Authentication authentication = new UserAuthentication(request.getId(), null, null);
+        Authentication authentication = new UserAuthentication(accountDto.getId(), null, null);
         String token = JwtTokenProvider.generateToken(authentication);
 
         return ResponseEntity.ok().body(token);
+    }
+
+    @PostMapping(value = "signup")
+    public ResponseEntity signUp(@RequestBody AccountDto accountDto) {
+        Account account = this.accountService.createAccount(accountDto);
+        Authentication authentication = new UserAuthentication(accountDto.getId(), null, null);
+        String token = JwtTokenProvider.generateToken(authentication);
+
+        return ResponseEntity.ok().body(token);
+
     }
 
 }

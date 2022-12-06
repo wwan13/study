@@ -1,5 +1,6 @@
 package com.wwan13.studyspring.accounts;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,5 +24,13 @@ public class AccountService {
         return this.accountRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new NullPointerException("no information"));
     }
+
+    public Account createAccount(AccountDto accountDto) {
+        Account account = Account.builder()
+                id().build();
+        Account newAccount = this.accountRepository.save(account);
+        return newAccount;
+    }
+
 
 }
