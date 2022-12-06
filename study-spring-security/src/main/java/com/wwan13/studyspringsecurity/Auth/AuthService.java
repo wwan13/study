@@ -4,6 +4,8 @@ import com.wwan13.studyspringsecurity.User.User;
 import com.wwan13.studyspringsecurity.User.UserRepository;
 import com.wwan13.studyspringsecurity.User.UserRequestDto;
 import com.wwan13.studyspringsecurity.User.UserResponseDto;
+import com.wwan13.studyspringsecurity.jwt.RefreshToken;
+import com.wwan13.studyspringsecurity.jwt.RefreshTokenRepository;
 import com.wwan13.studyspringsecurity.jwt.TokenDto;
 import com.wwan13.studyspringsecurity.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public UserResponseDto signup(UserRequestDto userRequestDto) {
         if (userRepository.existsByUsername(userRequestDto.getUsername())) {
@@ -44,7 +47,13 @@ public class AuthService {
         // 인증 정보로 토큰 생성
         TokenDto tokenDto = tokenProvider.generateToken(authentication);
 
-        // refresh token 에 대한 로직도 추가 해야함
+        // refresh token
+        RefreshToken refreshToken = RefreshToken.builder()
+                .key(authentication.getName())
+                .value(tokenDto.getRefreshToken())
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
 
         return tokenDto;
 

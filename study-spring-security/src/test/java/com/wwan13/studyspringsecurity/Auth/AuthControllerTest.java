@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -88,11 +88,7 @@ class AuthControllerTest {
         this.mockMvc.perform(post("/auth/signup")
                         .content(this.objectMapper.writeValueAsString(userRequestDto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().is(500));
-//                .andExpect(
-//                        result -> assertTrue(result.getResolvedException() instanceof RuntimeException)
-//                );
 
     }
 
