@@ -15,6 +15,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         // 유효한 자격이 아닐경우 401 애러
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "여기서 걸리는데");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "자격이 없습니다.");
     }
 }
