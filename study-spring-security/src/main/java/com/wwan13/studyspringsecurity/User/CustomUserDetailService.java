@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
@@ -17,6 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("load user by username");
         return userRepository.findByUsername(username)
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new UsernameNotFoundException("데이터베이스에서 찾을 수 없습니다."));
@@ -26,6 +28,8 @@ public class CustomUserDetailService implements UserDetailsService {
     private UserDetails createUserDetails(User user) {
 
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(user.getAuthority().toString());
+
+        System.out.println("create user detail");
 
         return new org.springframework.security.core.userdetails.User(
                 String.valueOf(user.getId()),

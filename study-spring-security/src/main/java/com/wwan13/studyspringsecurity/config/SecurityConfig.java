@@ -1,15 +1,18 @@
 package com.wwan13.studyspringsecurity.config;
 
+import com.wwan13.studyspringsecurity.User.CustomUserDetailService;
 import com.wwan13.studyspringsecurity.jwt.JwtAccessDeniedHandler;
 import com.wwan13.studyspringsecurity.jwt.JwtAuthenticationEntryPoint;
 import com.wwan13.studyspringsecurity.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -51,16 +54,16 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
-                .exceptionHandling()
-                .accessDeniedHandler(jwtAccessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-
-                .and()
                 .authorizeRequests()
                 .antMatchers("/auth/**")
                 .permitAll()
                 .antMatchers("/apis/**")
                 .authenticated()
+
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider))

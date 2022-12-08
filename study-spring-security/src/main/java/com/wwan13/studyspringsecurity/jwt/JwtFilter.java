@@ -32,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(jwtToken) && tokenProvider.validateToken(jwtToken)) {
             Authentication authentication = tokenProvider.getAuthentication(jwtToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);           // 토큰 유효성 검사 이후 해당 토큰을 SecurityContext 에 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication); // 토큰 유효성 검사 이후 해당 토큰을 SecurityContext 에 저장
         }
 
         filterChain.doFilter(request, response);
@@ -47,6 +47,6 @@ public class JwtFilter extends OncePerRequestFilter {
             return bearerToken.substring(BEARER_PREFIX.length());
         }
 
-         return null;
+        return null;
     }
 }

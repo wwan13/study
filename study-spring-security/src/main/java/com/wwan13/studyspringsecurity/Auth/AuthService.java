@@ -9,7 +9,6 @@ import com.wwan13.studyspringsecurity.jwt.RefreshTokenRepository;
 import com.wwan13.studyspringsecurity.jwt.TokenDto;
 import com.wwan13.studyspringsecurity.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -40,6 +39,8 @@ public class AuthService {
         // request 의 id, pw를 바탕으로 authentication token 생성
         UsernamePasswordAuthenticationToken authenticationToken = userRequestDto.toAuthentication();
 
+        System.out.println("service 2");
+        System.out.println(authenticationToken.toString());
         // 검증 (비밀번호 체크) 이 이뤄지는 부분
         // authenticate 메서드가 실행될때 CustomUserDetailService 의 loadUserByUsername 메서드가 실행됨
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
