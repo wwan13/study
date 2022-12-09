@@ -1,5 +1,7 @@
 package com.wwan13.studyspringsecurity.Auth;
 
+import com.wwan13.studyspringsecurity.User.User;
+import com.wwan13.studyspringsecurity.User.UserRepository;
 import com.wwan13.studyspringsecurity.User.UserRequestDto;
 import com.wwan13.studyspringsecurity.User.UserResponseDto;
 import com.wwan13.studyspringsecurity.jwt.TokenDto;
@@ -17,11 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserRepository userRepository;
 
     @PostMapping(value = "/signup")
     public ResponseEntity signup(@RequestBody UserRequestDto userRequestDto) {
 
         UserResponseDto userResponseDto = authService.signup(userRequestDto);
+
+        User savedUser = userRepository.findByUsername(userRequestDto.getUsername()).get();
+        System.out.println(savedUser.getId());
+        System.out.println(savedUser.getUsername());
+        System.out.println(savedUser.getPassword());
+
         return ResponseEntity.ok().body(userResponseDto);
 
     }
