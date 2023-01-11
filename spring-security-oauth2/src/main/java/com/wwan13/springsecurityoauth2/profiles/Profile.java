@@ -6,11 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-@Entity
 public class Profile {
 
-    @ManyToOne
-    private Account manager;
+//    @ManyToOne
+//    private Account manager;
 
     // todo
 
