@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Set;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -54,9 +53,9 @@ class AuthServerConfigTest{
 
         this.mockMvc.perform(post("/oauth/token")
                         .with(httpBasic(clientId,clientSecret))
-                        .param("username", username)
-                        .param("password", password)
-                        .param("grant_type", "password"))
+                            .param("username", username)
+                            .param("password", password)
+                            .param("grant_type", "password"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("access_token").exists());
