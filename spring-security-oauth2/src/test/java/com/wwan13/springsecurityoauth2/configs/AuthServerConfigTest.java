@@ -41,12 +41,13 @@ class AuthServerConfigTest{
         String clientId = "myApp";
         String clientSecret = "pass";
 
+        String PW_PREFIX = "{noop}";
         String username = "wwan13";
         String password = "taewan";
 
         Account account = Account.builder()
                 .email(username)
-                .password(password)
+                .password(PW_PREFIX+password)
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
         this.accountRepository.save(account);
