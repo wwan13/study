@@ -34,6 +34,8 @@ class AuthServerConfigTest{
     @Autowired
     MockMvc mockMvc;
 
+    static String PW_PREFIX = "{noop}";
+
     @Test
     @DisplayName("인증 토큰을 발급받는 테스트")
     public void getAuthToken() throws Exception{
@@ -41,7 +43,6 @@ class AuthServerConfigTest{
         String clientId = "myApp";
         String clientSecret = "pass";
 
-        String PW_PREFIX = "{noop}";
         String username = "wwan13";
         String password = "taewan";
 
