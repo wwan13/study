@@ -37,14 +37,14 @@ public class AppConfig {
                         .password("admin")
                         .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                         .build();
-                accountRepository.save(admin);
+                accountService.signup(admin);
 
                 Account user1 = Account.builder()
                         .email("audwls2lee@naver.com")
                         .password("qwer1234")
                         .roles(Set.of(AccountRole.USER))
                         .build();
-                accountRepository.save(user1);
+                accountService.signup(user1);
             }
         };
 

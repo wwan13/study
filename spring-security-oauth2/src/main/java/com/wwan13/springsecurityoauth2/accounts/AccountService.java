@@ -27,6 +27,18 @@ public class AccountService implements UserDetailsService {
         return new User(account.getEmail(), account.getPassword(), authorities(account.getRoles()));
     }
 
+    public Account signup(Account account) {
+        if (this.accountRepository.existsByEmail(account.getEmail())) {
+            throw new RuntimeException("이미 가입된 유저입니다.");
+        }
+        account.setPassword(this.passwordFormatter(account.getPassword()));
+        return this.accountRepository.save(account);
+    }
+
+    public String passwordFormatter(String password) {
+        return "{noop}" + password;
+    }
+
     private Collection<? extends GrantedAuthority> authorities(Set<AccountRole> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r.name())).collect(Collectors.toSet());
     }

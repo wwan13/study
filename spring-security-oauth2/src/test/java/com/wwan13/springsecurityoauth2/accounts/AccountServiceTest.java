@@ -58,4 +58,21 @@ class AccountServiceTest {
         assertThat(exception.getMessage()).contains(email);
 
     }
+
+    @Test
+    public void passwordFormatter() {
+
+        String password = "qwer1234";
+
+        Account account = Account.builder()
+                .email("asdasd@naver.com")
+                .password(password)
+                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+                .build();
+
+        Account createdAccount = accountService.signup(account);
+
+        assertThat(createdAccount.getPassword()).isEqualTo("{noop}"+password);
+
+    }
 }

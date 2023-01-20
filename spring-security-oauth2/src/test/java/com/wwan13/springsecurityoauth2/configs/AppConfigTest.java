@@ -2,6 +2,7 @@ package com.wwan13.springsecurityoauth2.configs;
 
 import com.wwan13.springsecurityoauth2.accounts.Account;
 import com.wwan13.springsecurityoauth2.accounts.AccountRepository;
+import com.wwan13.springsecurityoauth2.accounts.AccountService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ class AppConfigTest {
 
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    AccountService accountService;
 
     @Test
     public void applicationRunner() {
@@ -24,7 +27,7 @@ class AppConfigTest {
         Account adminUser = accountRepository.findByEmail(email).get();
 
         assertThat(adminUser.getEmail()).isEqualTo(email);
-
+        assertThat(adminUser.getPassword()).isEqualTo(accountService.passwordFormatter("admin"));
     }
 
 }
