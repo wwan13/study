@@ -28,6 +28,6 @@ public class AppProperties {
     private String clientId;
 
     @NotEmpty
-    private String clientSerret;
+    private String clientSecret;
 
 }

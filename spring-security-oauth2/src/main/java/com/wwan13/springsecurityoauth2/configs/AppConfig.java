@@ -36,15 +36,15 @@ public class AppConfig {
                 this.accountRepository.deleteAll();
 
                 Account admin = Account.builder()
-                        .email("admin@email.com")
-                        .password("admin")
+                        .email(appProperties.getAdminUsername())
+                        .password(appProperties.getAdminPassword())
                         .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                         .build();
                 accountService.signup(admin);
 
                 Account user1 = Account.builder()
-                        .email("audwls2lee@naver.com")
-                        .password("qwer1234")
+                        .email(appProperties.getUser1Username())
+                        .password(appProperties.getUser1Password())
                         .roles(Set.of(AccountRole.USER))
                         .build();
                 accountService.signup(user1);
