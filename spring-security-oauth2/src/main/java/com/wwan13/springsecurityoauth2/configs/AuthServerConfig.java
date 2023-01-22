@@ -1,6 +1,7 @@
 package com.wwan13.springsecurityoauth2.configs;
 
 import com.wwan13.springsecurityoauth2.accounts.AccountService;
+import com.wwan13.springsecurityoauth2.commons.AppProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     private final AuthenticationManager authenticationManager;
     private final TokenStore tokenStore;
     private final AccountService accountService;
+    private final AppProperties appProperties;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {

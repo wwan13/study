@@ -20,13 +20,10 @@ class AccountServiceTest {
 
     @Autowired
     AccountService accountService;
-    @Autowired
-    AccountRepository accountRepository;
 
     @Test
     public void findByUsername() {
 
-        // Given
         String username = "wwan13@naver.com";
         String password = "taewan";
 
@@ -35,14 +32,12 @@ class AccountServiceTest {
                 .password(password)
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
-        this.accountRepository.save(account);
+        this.accountService.signup(account);
 
-        // When
         UserDetailsService userDetailsService = (UserDetailsService) this.accountService;
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        // Then
-        assertThat(userDetails.getPassword()).isEqualTo(password);
+        assertThat(userDetails.getPassword()).isEqualTo(this.accountService.passwordFormatter(password));
 
     }
 
@@ -63,16 +58,29 @@ class AccountServiceTest {
     public void passwordFormatter() {
 
         String password = "qwer1234";
+        String formattedPassword = this.accountService.passwordFormatter(password);
+
+        assertThat(formattedPassword).isEqualTo("{noop}"+password);
+
+    }
+
+    @Test
+    public void signup() {
+
+        String email = "wwan13@naver.com";
+        String password = "qwer1234";
 
         Account account = Account.builder()
-                .email("asdasd@naver.com")
+                .email(email)
                 .password(password)
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
 
-        Account createdAccount = accountService.signup(account);
+        this.accountService.signup(account);
 
-        assertThat(createdAccount.getPassword()).isEqualTo("{noop}"+password);
+        assertThat(account.getEmail()).isEqualTo(email);
+        assertThat(account.getPassword()).isEqualTo(this.accountService.passwordFormatter(password));
 
     }
+
 }
