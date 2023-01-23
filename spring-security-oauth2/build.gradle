@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-configuration-processor:2.6.14'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.2'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'

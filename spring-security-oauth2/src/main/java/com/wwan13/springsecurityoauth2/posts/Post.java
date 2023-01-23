@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Builder @Getter @Setter
+@EqualsAndHashCode(of = "id")
 public class Post {
 
     @Id

@@ -1,5 +1,6 @@
 package com.wwan13.springsecurityoauth2.configs;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wwan13.springsecurityoauth2.accounts.Account;
 import com.wwan13.springsecurityoauth2.accounts.AccountRepository;
 import com.wwan13.springsecurityoauth2.accounts.AccountRole;
@@ -7,6 +8,7 @@ import com.wwan13.springsecurityoauth2.accounts.AccountService;
 import com.wwan13.springsecurityoauth2.commons.AppProperties;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,6 +20,11 @@ import java.util.Set;
 @Configuration
 @RequiredArgsConstructor
 public class AppConfig {
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 
     @Bean
     public ApplicationRunner applicationRunner() {
