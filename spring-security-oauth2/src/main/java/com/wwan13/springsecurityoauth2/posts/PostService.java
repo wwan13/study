@@ -1,6 +1,5 @@
 package com.wwan13.springsecurityoauth2.posts;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
@@ -40,6 +39,14 @@ public class PostService {
 
     public void deletePostById(Integer id) {
         this.postRepository.deleteById(id);
+    }
+
+    public void deleteAllPosts() {
+        this.postRepository.deleteAll();
+    }
+
+    public void update(Post post) {
+        post.setCreatedAt(LocalDateTime.now());
     }
 
 }

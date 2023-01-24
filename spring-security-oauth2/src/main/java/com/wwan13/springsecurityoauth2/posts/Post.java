@@ -2,10 +2,10 @@ package com.wwan13.springsecurityoauth2.posts;
 
 import com.wwan13.springsecurityoauth2.accounts.Account;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
