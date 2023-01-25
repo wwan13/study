@@ -2,15 +2,14 @@ package com.wwan13.springsecurityoauth2.posts;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
-import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +21,30 @@ public class PostController {
     @PostMapping
     public ResponseEntity createPost(@RequestBody PostDto postDto) {
         Post post = this.postService.createPost(postDto);
-        URI createdUri = linkTo(methodOn(PostController.class).createPost(postDto)).slash(String.valueOf(post.getId())).toUri();
+        URI createdUri = linkTo(methodOn(PostController.class).createPost(postDto)).slash(post.getId()).toUri();
 
-        return ResponseEntity.created().body(post);
+        return ResponseEntity.created(createdUri).body(post);
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity getPost(@PathVariable Integer id) {
+        Post post = this.postService.findPostById(id);
+
+        return ResponseEntity.ok().body(post);
+    }
+
+    @GetMapping
+    public ResponseEntity getAllPosts() {
+        List<Post> posts = this.postService.findAllPost();
+
+        return ResponseEntity.ok().body(posts);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity deletePost(@PathVariable Integer id) {
+        this.postService.deletePostById(id);
+
+        return ResponseEntity.ok().body("Delete Complete");
+    }
+
 }
