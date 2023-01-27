@@ -25,6 +25,12 @@ public class AppProperties {
     private String user1Password;
 
     @NotEmpty
+    private String testUser1Username;
+
+    @NotEmpty
+    private String testUser1Password;
+
+    @NotEmpty
     private String clientId;
 
     @NotEmpty

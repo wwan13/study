@@ -40,9 +40,6 @@ class PostControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    static String testUserEmail = "testUser1@naver.com";
-    static String testUserPassword = "testUserPassword";
-
     @Test
     @DisplayName("성공적으로 post 를 생성하는 테스트")
     public void createPost() throws Exception {
@@ -87,9 +84,9 @@ class PostControllerTest {
         }
 
         ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
-                .param("username", testUserEmail)
-                .param("password", testUserPassword)
+                .with(httpBasic(this.appProperties.getClientId(), this.appProperties.getClientSecret()))
+                .param("username", this.appProperties.getTestUser1Username())
+                .param("password", this.appProperties.getTestUser1Password())
                 .param("grant_type", "password"));
 
         String responseBody = perform.andReturn().getResponse().getContentAsString();
@@ -101,8 +98,8 @@ class PostControllerTest {
     public Account createAccount() {
 
         Account newAccount = Account.builder()
-                .email(testUserEmail)
-                .password(testUserPassword)
+                .email(this.appProperties.getTestUser1Username())
+                .password(this.appProperties.getTestUser1Password())
                 .roles(Set.of(AccountRole.USER))
                 .build();
 
