@@ -44,14 +44,19 @@ public class PostController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity deletePost(@PathVariable Integer id) {
+    public ResponseEntity deletePost(@PathVariable Integer id, @CurrentUser Account account) {
+
+        if (this.postService.getPostManager(id).equals(account)) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+
         this.postService.deletePostById(id);
 
         return ResponseEntity.ok().body("Delete Complete");
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity updatePost(@PathVariable Integer id, @RequestBody PostDto postDto ,@CurrentUser Account account) {
+    public ResponseEntity updatePost(@PathVariable Integer id, @RequestBody PostDto postDto, @CurrentUser Account account) {
 
         if (this.postService.getPostManager(id).equals(account)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
