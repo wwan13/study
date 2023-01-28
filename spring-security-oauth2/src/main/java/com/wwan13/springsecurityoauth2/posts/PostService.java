@@ -27,7 +27,7 @@ public class PostService {
     }
 
     public List<Post> findAllPost() {
-        return this.postRepository.findAll(Sort.by(Sort.Direction.DESC, "created_at"));
+        return this.postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 
     public Post findPostById(Integer id) {

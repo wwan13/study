@@ -5,6 +5,7 @@ import com.wwan13.springsecurityoauth2.accounts.Account;
 import com.wwan13.springsecurityoauth2.accounts.AccountRole;
 import com.wwan13.springsecurityoauth2.accounts.AccountService;
 import com.wwan13.springsecurityoauth2.commons.AppProperties;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -22,8 +22,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Set;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -36,17 +38,41 @@ class PostControllerTest {
     @Autowired
     AccountService accountService;
     @Autowired
+    PostService postService;
+    @Autowired
     AppProperties appProperties;
     @Autowired
     ObjectMapper objectMapper;
+
+    @BeforeEach
+    public void setUp() {
+
+        this.postService.deleteAllPosts();
+
+        PostDto postDto1 = PostDto.builder()
+                .title("title1")
+                .contents("contents1")
+                .build();
+        this.postService.createPost(postDto1);
+
+        PostDto postDto2 = PostDto.builder()
+                .title("title1")
+                .contents("contents1")
+                .build();
+        this.postService.createPost(postDto2);
+
+    }
 
     @Test
     @DisplayName("성공적으로 post 를 생성하는 테스트")
     public void createPost() throws Exception {
 
+        String title = "this is title";
+        String contents = "this is contents";
+
         PostDto postDto = PostDto.builder()
-                .title("title")
-                .contents("contents")
+                .title(title)
+                .contents(contents)
                 .build();
 
         this.mockMvc.perform(post("/api/posts")
@@ -54,7 +80,9 @@ class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postDto)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("title").value(title))
+                .andExpect(jsonPath("contents").value(contents));
 
     }
 
@@ -62,15 +90,27 @@ class PostControllerTest {
     @DisplayName("인증토큰 없이 post 를 생성하는 테스트")
     public void createPost_WithoutAccessToken() throws Exception {
 
+        String title = "this is title";
+        String contents = "this is contents";
+
         PostDto postDto = PostDto.builder()
-                .title("title")
-                .contents("contents")
+                .title(title)
+                .contents(contents)
                 .build();
 
         this.mockMvc.perform(post("/api/posts")
                 .content(objectMapper.writeValueAsString(postDto)))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void getAllPosts() throws Exception {
+
+        this.mockMvc.perform(get("/api/posts"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
     }
 
     private String getBearerToken(boolean needToCreateAccount) throws Exception {
