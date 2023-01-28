@@ -45,8 +45,20 @@ public class PostService {
         this.postRepository.deleteAll();
     }
 
-    public void update(Post post) {
-        post.setCreatedAt(LocalDateTime.now());
+    public Post updatePost(Integer id, PostDto postDto) {
+
+        Post post = this.findPostById(id);
+        post.setTitle(postDto.getTitle());
+        post.setContents(postDto.getContents());
+        post.setUpdateAt(LocalDateTime.now());
+
+        return post;
+    }
+
+    public Account getPostManager(Integer id) {
+
+        return this.findPostById(id).getManager();
+
     }
 
 }

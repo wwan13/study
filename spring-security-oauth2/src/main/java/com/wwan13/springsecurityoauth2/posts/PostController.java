@@ -3,6 +3,7 @@ package com.wwan13.springsecurityoauth2.posts;
 import com.wwan13.springsecurityoauth2.accounts.Account;
 import com.wwan13.springsecurityoauth2.accounts.CurrentUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +48,18 @@ public class PostController {
         this.postService.deletePostById(id);
 
         return ResponseEntity.ok().body("Delete Complete");
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity updatePost(@PathVariable Integer id, @RequestBody PostDto postDto ,@CurrentUser Account account) {
+
+        if (this.postService.getPostManager(id).equals(account)) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+
+        Post updatedPost = this.postService.updatePost(id, postDto);
+
+        return ResponseEntity.ok().body(updatedPost);
     }
 
 }

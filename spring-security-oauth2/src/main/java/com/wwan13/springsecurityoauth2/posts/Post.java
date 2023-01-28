@@ -25,6 +25,8 @@ public class Post {
 
     private LocalDateTime createdAt;
 
+    private LocalDateTime updateAt;
+
     @ManyToOne
     private Account manager;
 }

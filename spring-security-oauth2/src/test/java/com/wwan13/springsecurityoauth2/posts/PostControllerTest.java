@@ -118,6 +118,24 @@ class PostControllerTest {
 
     }
 
+    @Test
+    public void updatePost() {
+
+        PostDto postDto = PostDto.builder()
+                .title("new title")
+                .contents("new contents")
+                .build();
+
+        // TODO
+
+    }
+
+    @Test
+    @DisplayName("포스트 매니저가 아닌데 업데이트에 접근하는 경우")
+    public void updatePost_notPostManager() {
+        // TODO
+    }
+
     private String getBearerToken(boolean needToCreateAccount) throws Exception {
         return "Bearer " + getAccessToken(needToCreateAccount);
     }
