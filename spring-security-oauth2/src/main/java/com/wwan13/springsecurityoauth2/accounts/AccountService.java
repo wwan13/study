@@ -24,7 +24,7 @@ public class AccountService implements UserDetailsService {
         Account account = this.accountRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        return new User(account.getEmail(), account.getPassword(), account.getAuthorities());
+        return new AccountAdapter(account);
     }
 
     public Account signup(Account account) {

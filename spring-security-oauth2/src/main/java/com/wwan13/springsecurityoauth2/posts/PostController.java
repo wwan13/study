@@ -1,5 +1,7 @@
 package com.wwan13.springsecurityoauth2.posts;
 
+import com.wwan13.springsecurityoauth2.accounts.Account;
+import com.wwan13.springsecurityoauth2.accounts.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +21,9 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity createPost(@RequestBody PostDto postDto) {
-        Post post = this.postService.createPost(postDto);
-        URI createdUri = linkTo(methodOn(PostController.class).createPost(postDto)).slash(post.getId()).toUri();
+    public ResponseEntity createPost(@RequestBody PostDto postDto, @CurrentUser Account currentUser) {
+        Post post = this.postService.createPost(postDto, currentUser);
+        URI createdUri = linkTo(methodOn(PostController.class).createPost(postDto, currentUser)).slash(post.getId()).toUri();
 
         return ResponseEntity.created(createdUri).body(post);
     }

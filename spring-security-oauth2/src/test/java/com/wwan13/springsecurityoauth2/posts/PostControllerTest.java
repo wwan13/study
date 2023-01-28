@@ -2,6 +2,7 @@ package com.wwan13.springsecurityoauth2.posts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wwan13.springsecurityoauth2.accounts.Account;
+import com.wwan13.springsecurityoauth2.accounts.AccountAdapter;
 import com.wwan13.springsecurityoauth2.accounts.AccountRole;
 import com.wwan13.springsecurityoauth2.accounts.AccountService;
 import com.wwan13.springsecurityoauth2.commons.AppProperties;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,7 +47,9 @@ class PostControllerTest {
     ObjectMapper objectMapper;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
+
+        AccountAdapter accountAdapter = (AccountAdapter) this.accountService.loadUserByUsername(this.appProperties.getUser1Username());
 
         this.postService.deleteAllPosts();
 
@@ -53,13 +57,13 @@ class PostControllerTest {
                 .title("title1")
                 .contents("contents1")
                 .build();
-        this.postService.createPost(postDto1);
+        this.postService.createPost(postDto1, accountAdapter.getAccount());
 
         PostDto postDto2 = PostDto.builder()
                 .title("title1")
                 .contents("contents1")
                 .build();
-        this.postService.createPost(postDto2);
+        this.postService.createPost(postDto2, accountAdapter.getAccount());
 
     }
 
@@ -82,7 +86,8 @@ class PostControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("title").value(title))
-                .andExpect(jsonPath("contents").value(contents));
+                .andExpect(jsonPath("contents").value(contents))
+                .andExpect(jsonPath("manager").exists());
 
     }
 

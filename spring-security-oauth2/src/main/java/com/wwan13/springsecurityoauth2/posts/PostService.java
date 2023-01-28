@@ -1,5 +1,6 @@
 package com.wwan13.springsecurityoauth2.posts;
 
+import com.wwan13.springsecurityoauth2.accounts.Account;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
@@ -15,12 +16,11 @@ public class PostService {
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
 
-    public Post createPost(PostDto postDto) {
+    public Post createPost(PostDto postDto, Account account) {
 
         Post post = this.modelMapper.map(postDto, Post.class);
         post.setCreatedAt(LocalDateTime.now());
-
-        // user
+        post.setManager(account);
 
         return this.postRepository.save(post);
 
