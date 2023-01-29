@@ -47,7 +47,7 @@ public class PostController {
     public ResponseEntity deletePost(@PathVariable Integer id, @CurrentUser Account account) {
 
         if (this.postService.getPostManager(id).equals(account)) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity("unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         this.postService.deletePostById(id);
@@ -58,8 +58,8 @@ public class PostController {
     @PutMapping(value = "/{id}")
     public ResponseEntity updatePost(@PathVariable Integer id, @RequestBody PostDto postDto, @CurrentUser Account account) {
 
-        if (this.postService.getPostManager(id).equals(account)) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        if (!this.postService.getPostManager(id).equals(account)) {
+            return new ResponseEntity("unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         Post updatedPost = this.postService.updatePost(id, postDto);

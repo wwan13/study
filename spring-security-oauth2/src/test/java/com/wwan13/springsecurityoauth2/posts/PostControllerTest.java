@@ -24,8 +24,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Set;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -119,21 +118,61 @@ class PostControllerTest {
     }
 
     @Test
-    public void updatePost() {
+    public void updatePost() throws Exception {
+
+        String accessToken = getBearerToken(true);
+        AccountAdapter user = (AccountAdapter) this.accountService.loadUserByUsername(this.appProperties.getTestUser1Username());
 
         PostDto postDto = PostDto.builder()
-                .title("new title")
-                .contents("new contents")
+                .title("title")
+                .contents("contents")
+                .build();
+        Post createdPost = this.postService.createPost(postDto, user.getAccount());
+
+        String newTitle = "new title";
+        String newContents = "new contents";
+
+        PostDto updatePostDto = PostDto.builder()
+                .title(newTitle)
+                .contents(newContents)
                 .build();
 
-        // TODO
+        this.mockMvc.perform(put("/api/posts/" + createdPost.getId().toString())
+                .header(HttpHeaders.AUTHORIZATION, accessToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatePostDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("title").value(newTitle))
+                .andExpect(jsonPath("contents").value(newContents));
 
     }
 
     @Test
     @DisplayName("포스트 매니저가 아닌데 업데이트에 접근하는 경우")
-    public void updatePost_notPostManager() {
-        // TODO
+    public void updatePost_notPostManager() throws Exception {
+
+        String accessToken = getBearerToken(true);
+        AccountAdapter user = (AccountAdapter) this.accountService.loadUserByUsername(this.appProperties.getUser1Username());
+
+        PostDto postDto = PostDto.builder()
+                .title("title")
+                .contents("contents")
+                .build();
+        Post createdPost = this.postService.createPost(postDto, user.getAccount());
+
+        PostDto updatePostDto = PostDto.builder()
+                .title("new title")
+                .contents("new contents")
+                .build();
+
+        this.mockMvc.perform(put("/api/posts/" + createdPost.getId().toString())
+                        .header(HttpHeaders.AUTHORIZATION, accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatePostDto)))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+
     }
 
     private String getBearerToken(boolean needToCreateAccount) throws Exception {
