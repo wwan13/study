@@ -22,9 +22,9 @@ public class Application {
 
     private String name;
 
-    private Long studentNumber;
+    private Integer studentNumber;
 
     @ElementCollection
-    private List<Answer> answers = new ArrayList<>();
+    private List<String> answers = new ArrayList<>();
 
 }

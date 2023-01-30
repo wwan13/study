@@ -2,10 +2,7 @@ package com.wwan13.jpapractice.applications;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -26,6 +23,16 @@ public class ApplicationController {
         URI createdUri = linkTo(methodOn(ApplicationController.class).createApplication(application)).slash(newApplication.getId()).toUri();
 
         return ResponseEntity.created(createdUri).body(newApplication);
+    }
+
+    @GetMapping(value = "/{studentNumber}")
+    public ResponseEntity getApplication(@PathVariable Integer studentNumber) {
+
+        Application application = this.applicationRepository.findApplicationByStudentNumber(studentNumber)
+                .orElseThrow(() -> new NullPointerException());
+
+        return ResponseEntity.ok().body(application);
+
     }
 
 }
