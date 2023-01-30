@@ -27,6 +27,4 @@ public class Application {
     @ElementCollection
     private List<Answer> answers = new ArrayList<>();
 
-    private LocalDateTime update_at;
-
 }
