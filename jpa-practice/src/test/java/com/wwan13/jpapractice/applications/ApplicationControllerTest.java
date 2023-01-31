@@ -91,5 +91,4 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("studentNumber").value(20191234));
 
     }
-
 }
